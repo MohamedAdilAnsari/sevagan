@@ -519,6 +519,10 @@ if (fs.existsSync(distPath)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`🚀 Node.js Express server running at http://127.0.0.1:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Node.js Express server running at http://127.0.0.1:${PORT}`);
+  });
+}
+
+export default app;
