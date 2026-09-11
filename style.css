@@ -1637,3 +1637,178 @@ input, select, textarea {
   }
 }
 
+
+/* ==========================================================================
+   ADVANCED MOBILE ALIGNMENT FIXES
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 1.5rem 1rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .section-header {
+    text-align: center !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .section-title {
+    font-size: 1.75rem !important;
+    text-align: center !important;
+  }
+
+  .search-bar, .glass-search-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.75rem !important;
+    padding: 1rem !important;
+  }
+
+  .search-field, .search-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    padding: 0.8rem 1rem !important;
+    margin-top: 0.25rem !important;
+  }
+
+  .hero-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .hero-badge {
+    align-self: center !important;
+    margin: 0 auto 1.2rem auto !important;
+  }
+
+  .hero-description {
+    text-align: center !important;
+    font-size: 0.95rem !important;
+  }
+
+  .hero-cta-group {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.8rem !important;
+    align-items: stretch !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .hero-btn-primary, .hero-btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .hero-features-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 1rem !important;
+    text-align: center !important;
+  }
+
+  .hero-feature-item {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .donors-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .donor-card {
+    width: 100% !important;
+    padding: 1.2rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .donor-card-header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .donor-card-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.6rem !important;
+  }
+
+  .donor-card-actions .btn, .donor-card-actions a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .filter-chips-container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .filter-chips-container > div {
+    flex-wrap: nowrap !important;
+  }
+
+  .chip {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .form-group, .input-group {
+    width: 100% !important;
+  }
+
+  .form-control, .search-input, select, input[type="text"], input[type="date"], input[type="tel"], input[type="password"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .matrix-table, .compatibility-matrix {
+    width: 100% !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+
+  .footer {
+    padding: 2.5rem 1rem 1.5rem 1rem !important;
+    text-align: center !important;
+  }
+
+  .footer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2rem !important;
+  }
+
+  .footer-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
+
