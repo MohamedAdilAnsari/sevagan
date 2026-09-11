@@ -1477,3 +1477,163 @@ body.light-theme select option:disabled {
   background: transparent;
   filter: drop-shadow(0 20px 50px rgba(230, 57, 70, 0.45));
 }
+/* ==========================================================================
+   MOBILE & RESPONSIVE DESIGN ENHANCEMENTS FOR SEVAGAN
+   ========================================================================== */
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0.6rem 1rem !important;
+  }
+  
+  .logo-text-brand {
+    font-size: 1.15rem !important;
+  }
+
+  .header-actions {
+    gap: 0.4rem !important;
+  }
+
+  .auth-buttons .btn {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .language-selector {
+    padding: 0.2rem 0.4rem !important;
+  }
+
+  .language-dropdown {
+    font-size: 0.75rem !important;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 65px;
+    right: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: calc(100vh - 65px);
+    background: #0E1118;
+    border-left: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1.5rem;
+    gap: 1.2rem;
+    z-index: 2500;
+    overflow-y: auto;
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+  }
+
+  .nav-menu.active {
+    right: 0 !important;
+  }
+
+  .nav-link {
+    width: 100%;
+    font-size: 1.05rem !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  .hero-main-title {
+    font-size: 2.1rem !important;
+    line-height: 1.25 !important;
+    text-align: center;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem !important;
+    text-align: center;
+  }
+
+  .hero-floating-search-card {
+    padding: 1.2rem !important;
+    width: 100% !important;
+    margin-top: 1.5rem !important;
+  }
+
+  .search-card-left-info {
+    max-width: 100% !important;
+    text-align: center;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  .card-search-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .grid, .grid-2, .grid-3, .grid-4, .form-grid, .stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .modal-overlay {
+    padding: 1rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1.5rem 1.2rem !important;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 16px !important;
+  }
+
+  .table-container, .table-responsive, table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+
+  .footer-brand {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-main-title {
+    font-size: 1.75rem !important;
+  }
+
+  .auth-buttons .btn span {
+    display: none;
+  }
+
+  .auth-buttons .btn {
+    padding: 0.4rem 0.6rem !important;
+  }
+
+  .card-field-group {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
