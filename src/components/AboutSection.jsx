@@ -7,7 +7,7 @@ export const AboutSection = () => {
   return (
     <div className="section-container">
       {/* Hero Banner */}
-      <div className="glass-card text-center" style={{ padding: '3.5rem 2rem', marginBottom: '3rem', background: 'linear-gradient(135deg, rgba(226, 55, 55, 0.12) 0%, rgba(20, 20, 20, 0.4) 100%)' }}>
+      <div className="glass-card text-center" style={{ padding: '3.5rem 2rem', marginBottom: '3rem', background: 'linear-gradient(135deg, rgba(226, 55, 55, 0.12) 0%, var(--card-bg) 100%)' }}>
         <h2 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }} data-i18n="about_hero_title">
           {t('about_hero_title')}
         </h2>

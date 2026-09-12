@@ -131,8 +131,10 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('sevagan_theme', theme);
     if (theme === 'light') {
       document.body.classList.add('light-theme');
+      document.documentElement.classList.add('light-theme');
     } else {
       document.body.classList.remove('light-theme');
+      document.documentElement.classList.remove('light-theme');
     }
   }, [theme]);
 

@@ -9,7 +9,7 @@ import { CompatibilityMatrix } from './CompatibilityMatrix';
 import { HallOfFame } from './HallOfFame';
 
 export const HeroSection = () => {
-  const { t, navigateToSection } = useApp();
+  const { t, navigateToSection, donors, openModal } = useApp();
   const [selectedBlood, setSelectedBlood] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
 
@@ -27,7 +27,11 @@ export const HeroSection = () => {
           <div className="hero-left">
             {/* Tag Badge */}
             <div className="hero-badge">
-              <span className="badge-drop-icon">🩸</span>
+              <span className="badge-drop-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#E63946" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                </svg>
+              </span>
               <span>{t('hero_badge')}</span>
             </div>
 

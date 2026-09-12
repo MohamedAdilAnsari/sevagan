@@ -96,14 +96,14 @@ export const Navbar = () => {
             <div className="user-profile-menu">
               <button className="btn btn-outline btn-nav-login" onClick={() => handleNavClick('profile')}>
                 <i className="fas fa-user-circle"></i>
-                {user?.name || 'Profile'}
+                <span>{user?.name || 'Profile'}</span>
               </button>
-              <button className="btn btn-primary btn-nav-signup" onClick={logoutUser} style={{ marginLeft: '8px' }}>
-                {t('btn_logout')}
+              <button className="btn btn-primary btn-nav-signup" onClick={logoutUser}>
+                <span>{t('btn_logout')}</span>
               </button>
             </div>
           ) : (
-            <div className="auth-buttons" style={{ display: 'flex', gap: '0.6rem' }}>
+            <div className="auth-buttons">
               <button className="btn btn-primary btn-nav-signup" onClick={() => openModal('signup')}>
                 <i className="fas fa-user"></i>
                 <span>{t('btn_signup')}</span>
