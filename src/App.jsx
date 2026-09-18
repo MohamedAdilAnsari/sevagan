@@ -11,6 +11,7 @@ import { AboutSection } from './components/AboutSection';
 import { ProfileSection } from './components/ProfileSection';
 import { Modals } from './components/Modals';
 import { LoginNotificationBanner } from './components/LoginNotificationBanner';
+import { ChatBot } from './components/ChatBot';
 import { Footer } from './components/Footer';
 
 const MainContent = () => {
@@ -39,6 +40,7 @@ export function App() {
         <MainContent />
         <Modals />
         <LoginNotificationBanner />
+        <ChatBot />
         <Footer />
       </div>
     </AppProvider>

@@ -373,6 +373,52 @@ app.post('/api/send-email-otp', async (req, res) => {
   });
 });
 
+// AI Chatbot Assistant Endpoint
+app.post('/api/chat', (req, res) => {
+  const { message, language } = req.body || {};
+  const msg = (message || '').toLowerCase();
+
+  let reply = '';
+  let actionSection = null;
+  let actionLabel = null;
+  let actionModal = null;
+
+  if (msg.includes('find') || msg.includes('search') || msg.includes('donor')) {
+    reply = language === 'ta' 
+      ? 'உங்களுக்கு அருகில் உள்ள குருதி கொடையாளர்களை இரத்த வகை மற்றும் மாவட்டம் மூலம் தேடலாம்.' 
+      : 'You can search for voluntary donors by blood group and city on our Find Donors section.';
+    actionSection = 'find-donors';
+    actionLabel = 'Find Donors';
+  } else if (msg.includes('register') || msg.includes('become') || msg.includes('sign up')) {
+    reply = language === 'ta'
+      ? 'கொடையாளராக பதிவு செய்ய 2 நிமிடங்கள் மட்டுமே ஆகும். 18-65 வயதுக்குட்பட்ட அனைவரும் பதிவு செய்யலாம்.'
+      : 'Registering as a donor takes under 2 minutes! Anyone aged 18-65 in good health can register.';
+    actionSection = 'become-donor';
+    actionLabel = 'Become a Donor';
+  } else if (msg.includes('emergency') || msg.includes('request') || msg.includes('urgent')) {
+    reply = 'Post an emergency blood request immediately. Nearby registered donors are alerted right away!';
+    actionSection = 'request-blood';
+    actionLabel = 'Post Request';
+  } else if (msg.includes('compatib') || msg.includes('group') || msg.includes('o+')) {
+    reply = 'O Negative (O-) is the Universal Donor. O Positive (O+) can donate to O+, A+, B+, AB+.';
+    actionSection = 'home';
+    actionLabel = 'View Compatibility Chart';
+  } else if (msg.includes('otp') || msg.includes('password') || msg.includes('login') || msg.includes('forgot')) {
+    reply = 'You can verify your number via SMS/Email OTP, or reset your password using the "Forgot Password?" button.';
+    actionModal = 'login';
+    actionLabel = 'Open Login / Reset';
+  } else {
+    reply = 'I am the SEVAGAN AI Assistant! How can I help you with blood donation, emergency requests, or account verification today?';
+  }
+
+  return res.json({
+    reply,
+    actionSection,
+    actionLabel,
+    actionModal
+  });
+});
+
 // 1. Send OTP Endpoint
 app.post('/api/send-otp', async (req, res) => {
   const { mobile, purpose } = req.body || {};
@@ -791,8 +837,12 @@ app.post('/api/requests', async (req, res) => {
 
 // Serve frontend for SPA routing if dist exists
 if (fs.existsSync(distPath)) {
-  app.get('{*splat}', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
+  app.use(express.static(distPath));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      return res.sendFile(path.join(distPath, 'index.html'));
+    }
+    next();
   });
 }
 
