@@ -6,6 +6,7 @@ export const HallOfFame = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedHero, setSelectedHero] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   // Default Hall of Fame Champions
   const defaultChampions = [
@@ -58,6 +59,8 @@ export const HallOfFame = () => {
     }
     return true;
   });
+
+  const displayedLeaders = showAll ? filteredLeaders : filteredLeaders.slice(0, 7);
 
   const totalLivesSaved = allLeaders.reduce((sum, h) => sum + h.saved, 0);
   const totalDonations = allLeaders.reduce((sum, h) => sum + h.donations, 0);
@@ -157,7 +160,7 @@ export const HallOfFame = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredLeaders.map((hero, idx) => {
+            {displayedLeaders.map((hero, idx) => {
               const rankDisplay = idx === 0 ? '🥇 #1' : idx === 1 ? '🥈 #2' : idx === 2 ? '🥉 #3' : `#${idx + 1}`;
               return (
                 <tr 
@@ -212,6 +215,30 @@ export const HallOfFame = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Read More / Show Less Toggle Button */}
+      {filteredLeaders.length > 7 && (
+        <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+          <button 
+            className="btn btn-outline"
+            onClick={() => setShowAll(prev => !prev)}
+            style={{
+              padding: '0.65rem 1.8rem',
+              fontSize: '0.92rem',
+              borderRadius: '30px',
+              color: '#ffffff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.3s ease',
+              background: 'rgba(255, 255, 255, 0.05)'
+            }}
+          >
+            <span>{showAll ? 'Show Less' : `Read More (${filteredLeaders.length - 7} More Champions)`}</span>
+            <span>{showAll ? '▲' : '▼'}</span>
+          </button>
+        </div>
+      )}
 
       {/* Mini Hero Certificate Popup */}
       {selectedHero && (
