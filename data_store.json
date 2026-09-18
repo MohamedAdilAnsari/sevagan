@@ -1,0 +1,261 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Karthik Raja",
+      "mobile": "9876543210",
+      "password_hash": "$2b$10$twIioGsAu//4cqXiyDI5au9pPH/PzQQHVUdpjD2LVbBP5eH/R9vOy",
+      "role": "user"
+    },
+    {
+      "id": 2,
+      "name": "Ananya Sharma",
+      "mobile": "9876543211",
+      "password_hash": "$2b$10$I755I5wTVbVYXCKGlGpc/.oFd.6PJXg2DKdlCyqQsgeEkSXxKJdJy",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "name": "Test User",
+      "mobile": "9998887770",
+      "password_hash": "$2b$10$jhpBSI5x7pkQpIeFFCd.keepJaIb5v5.Do7D5q0jPKgPQ2A18ArjK",
+      "role": "user"
+    },
+    {
+      "id": 4,
+      "name": "siva",
+      "mobile": "98765643210",
+      "password_hash": "$2b$10$II8JLd2135FXavBDeoejPuDk19K8wI5NOnLue7eNv.Y1ocAtHoHu6",
+      "role": "user"
+    },
+    {
+      "id": 5,
+      "name": "Test User",
+      "mobile": "1789109100",
+      "password_hash": "$2b$10$TaYid02XdqGIkh5b2kN4OeH4BmaYL2hDLskXwmwOD./dWkvljJD7G",
+      "role": "user"
+    },
+    {
+      "id": 6,
+      "name": "Test User",
+      "mobile": "1789109142",
+      "password_hash": "$2b$10$ERj33ExVun.u3Gq5swdPfuJpzt/Er8d5XN4mZo05s.etLGLGyKax2",
+      "role": "user"
+    },
+    {
+      "id": 7,
+      "name": "adil ",
+      "mobile": "9363554087",
+      "password_hash": "$2b$10$mosiO7YlFhTlUDqrDid3fOGm7q8S/P72LOZMwp0k7esPvpWvcpseq",
+      "role": "user"
+    }
+  ],
+  "donors": [
+    {
+      "id": 7,
+      "name": "siva",
+      "mobile": "9876543210",
+      "group": "B+",
+      "blood": "B+",
+      "city": "New Delhi (Capital)",
+      "district": "New Delhi",
+      "available": true
+    },
+    {
+      "id": 6,
+      "name": "New Donor",
+      "mobile": "9998887771",
+      "group": "O+",
+      "blood": "O+",
+      "city": "Chennai",
+      "district": "Chennai",
+      "available": true
+    },
+    {
+      "id": 1,
+      "user_id": 1,
+      "name": "Karthik Raja",
+      "group": "O+",
+      "blood": "O+",
+      "city": "Chennai",
+      "district": "Chennai",
+      "state": "Tamil Nadu",
+      "country": "India",
+      "mobile": "9876543210",
+      "available": true
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "name": "Ananya Sharma",
+      "group": "A+",
+      "blood": "A+",
+      "city": "Coimbatore",
+      "district": "Coimbatore",
+      "state": "Tamil Nadu",
+      "country": "India",
+      "mobile": "9876543211",
+      "available": true
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "name": "Vijay Kumar",
+      "group": "B+",
+      "blood": "B+",
+      "city": "Madurai",
+      "district": "Madurai",
+      "state": "Tamil Nadu",
+      "country": "India",
+      "mobile": "9876543212",
+      "available": true
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "name": "Priya Dharshini",
+      "group": "O-",
+      "blood": "O-",
+      "city": "Trichy",
+      "district": "Tiruchirappalli",
+      "state": "Tamil Nadu",
+      "country": "India",
+      "mobile": "9876543213",
+      "available": true
+    },
+    {
+      "id": 5,
+      "user_id": 5,
+      "name": "Suresh Raina",
+      "group": "AB-",
+      "blood": "AB-",
+      "city": "Salem",
+      "district": "Salem",
+      "state": "Tamil Nadu",
+      "country": "India",
+      "mobile": "9876543214",
+      "available": true
+    }
+  ],
+  "requests": [
+    {
+      "id": 1,
+      "patient": "Emergency Patient",
+      "mobile": "9998887772",
+      "blood": "AB+",
+      "units": 2,
+      "hospital": "Apollo Hospital",
+      "city": "",
+      "district": "",
+      "created_at": "2026-09-11T05:29:37.637Z"
+    }
+  ],
+  "notifications": [
+    {
+      "type": "otp",
+      "title": "📱 Real SMS OTP Sent",
+      "message": "OTP sent to +91 9363554087 via SMS gateway.",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:41:32.462Z"
+    },
+    {
+      "type": "otp",
+      "title": "🔑 Password Reset OTP",
+      "message": "Password reset requested for +91 9363554087. OTP sent via SMS.",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:40:30.810Z"
+    },
+    {
+      "type": "login",
+      "title": "🔐 Password Reset Success",
+      "message": "Password updated successfully for +91 9363554087.",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:38:34.731Z"
+    },
+    {
+      "type": "otp",
+      "title": "🔑 Password Reset OTP",
+      "message": "Password reset requested for +91 9363554087. OTP sent via SMS.",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:38:00.969Z"
+    },
+    {
+      "type": "otp",
+      "title": "📱 Real SMS OTP Sent",
+      "message": "OTP sent to +91 9363554087 via SMS gateway.",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:16:35.459Z"
+    },
+    {
+      "type": "signup",
+      "title": "🆕 New User Registered",
+      "message": "adil  (9363554087) registered a new account on SEVAGAN.",
+      "user": {
+        "name": "adil ",
+        "mobile": "9363554087",
+        "role": "user"
+      },
+      "timestamp": "2026-09-18T06:05:06.547Z"
+    },
+    {
+      "type": "otp",
+      "title": "🔐 Verification OTP Generated",
+      "message": "Verification code for 9363554087: 6556",
+      "mobile": "9363554087",
+      "timestamp": "2026-09-18T06:04:37.052Z"
+    },
+    {
+      "type": "otp",
+      "title": "🔐 Verification OTP Generated",
+      "message": "Verification code for 9876543210: 4189",
+      "mobile": "9876543210",
+      "timestamp": "2026-09-18T05:52:58.779Z"
+    },
+    {
+      "type": "login",
+      "title": "🔑 User Logged In",
+      "message": "User Test User (1789109142) just logged into SEVAGAN!",
+      "user": {
+        "id": 6,
+        "name": "Test User",
+        "mobile": "1789109142",
+        "role": "user"
+      },
+      "timestamp": "2026-09-11T06:45:42.542Z"
+    },
+    {
+      "type": "signup",
+      "title": "🆕 New User Registered",
+      "message": "Test User (1789109142) registered a new account on SEVAGAN.",
+      "user": {
+        "name": "Test User",
+        "mobile": "1789109142",
+        "role": "user"
+      },
+      "timestamp": "2026-09-11T06:45:42.466Z"
+    },
+    {
+      "type": "login",
+      "title": "🔑 User Logged In",
+      "message": "User Test User (1789109100) just logged into SEVAGAN!",
+      "user": {
+        "id": 5,
+        "name": "Test User",
+        "mobile": "1789109100",
+        "role": "user"
+      },
+      "timestamp": "2026-09-11T06:45:01.055Z"
+    },
+    {
+      "type": "signup",
+      "title": "🆕 New User Registered",
+      "message": "Test User (1789109100) registered a new account on SEVAGAN.",
+      "user": {
+        "name": "Test User",
+        "mobile": "1789109100",
+        "role": "user"
+      },
+      "timestamp": "2026-09-11T06:45:00.978Z"
+    }
+  ]
+}
