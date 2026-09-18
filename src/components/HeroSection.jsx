@@ -6,6 +6,7 @@ import {
 } from '../data/constants';
 import { HeroBloodDropFill } from './HeroBloodDropFill';
 import { CompatibilityMatrix } from './CompatibilityMatrix';
+import { EmergencyRadarWidget } from './EmergencyRadarWidget';
 import { HallOfFame } from './HallOfFame';
 
 export const HeroSection = () => {
@@ -198,10 +199,13 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      {/* Matrix & Hall of Fame below Wave */}
+      {/* Matrix, Emergency Radar & Hall of Fame below Wave */}
       <div className="section-container">
         <div style={{ marginTop: '3rem' }}>
           <CompatibilityMatrix />
+        </div>
+        <div style={{ marginTop: '3rem' }}>
+          <EmergencyRadarWidget />
         </div>
         <div style={{ marginTop: '4rem' }}>
           <HallOfFame />
