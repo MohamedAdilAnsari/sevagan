@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import nodemailer from 'nodemailer';
+import compression from 'compression';
 import { GoogleGenAI } from '@google/genai';
 import { User, Donor, BloodRequest, NotificationLog } from './models/dbModels.js';
 
@@ -16,8 +17,26 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// High-Performance Middleware
+app.use(compression()); // Gzip/Brotli compression for 70-80% smaller payloads
 app.use(cors());
 app.use(express.json());
+
+// In-Memory Fast API Cache Layer
+const apiMemoryCache = new Map();
+function getCachedApi(key) {
+  const item = apiMemoryCache.get(key);
+  if (item && (Date.now() - item.time < 30000)) { // 30s TTL
+    return item.data;
+  }
+  return null;
+}
+function setCachedApi(key, data) {
+  apiMemoryCache.set(key, { data, time: Date.now() });
+}
+function clearApiCache() {
+  apiMemoryCache.clear();
+}
 
 // MongoDB Connection State Flag
 let isMongoConnected = false;
@@ -729,7 +748,15 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/donors', async (req, res) => {
   const { blood_group, blood, city, district } = req.query;
   const targetGroup = blood_group || blood;
+  const cacheKey = `donors:${targetGroup || ''}:${city || ''}:${district || ''}`;
 
+  const cached = getCachedApi(cacheKey);
+  if (cached) {
+    res.setHeader('X-Cache', 'HIT');
+    return res.json(cached);
+  }
+
+  let results = [];
   if (isMongoConnected) {
     try {
       let query = {};
@@ -737,15 +764,17 @@ app.get('/api/donors', async (req, res) => {
       if (city) query.city = new RegExp(city, 'i');
       if (district) query.district = new RegExp(district, 'i');
 
-      const mongoDonors = await Donor.find(query).sort({ _id: -1 });
-      return res.json(mongoDonors);
+      results = await Donor.find(query).lean().sort({ _id: -1 });
+      setCachedApi(cacheKey, results);
+      res.setHeader('X-Cache', 'MISS');
+      return res.json(results);
     } catch (e) {
       console.warn('Mongo donor fetch failed:', e);
     }
   }
 
   // Local JSON Fallback
-  let results = db.donors;
+  results = db.donors;
   if (targetGroup) {
     results = results.filter(d => (d.group || d.blood) === targetGroup);
   }
@@ -756,6 +785,8 @@ app.get('/api/donors', async (req, res) => {
     results = results.filter(d => d.district && d.district.toLowerCase().includes(district.toLowerCase()));
   }
 
+  setCachedApi(cacheKey, results);
+  res.setHeader('X-Cache', 'MISS');
   res.json(results);
 });
 
@@ -768,6 +799,8 @@ app.post('/api/donors', async (req, res) => {
     if (!mobile || !name || !bloodGroup) {
       return res.status(400).json({ message: 'Name, mobile, and blood group are required' });
     }
+
+    clearApiCache();
 
     if (isMongoConnected) {
       const mongoDonor = new Donor({
