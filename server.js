@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import nodemailer from 'nodemailer';
+import { GoogleGenAI } from '@google/genai';
 import { User, Donor, BloodRequest, NotificationLog } from './models/dbModels.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -374,45 +375,86 @@ app.post('/api/send-email-otp', async (req, res) => {
 });
 
 // AI Chatbot Assistant Endpoint
-app.post('/api/chat', (req, res) => {
+app.post('/api/chat', async (req, res) => {
   const { message, language } = req.body || {};
   const msg = (message || '').toLowerCase();
 
-  let reply = '';
   let actionSection = null;
   let actionLabel = null;
   let actionModal = null;
 
   if (msg.includes('find') || msg.includes('search') || msg.includes('donor')) {
+    actionSection = 'find-donors';
+    actionLabel = 'Find Donors';
+  } else if (msg.includes('register') || msg.includes('become') || msg.includes('sign up')) {
+    actionSection = 'become-donor';
+    actionLabel = 'Become a Donor';
+  } else if (msg.includes('emergency') || msg.includes('request') || msg.includes('urgent')) {
+    actionSection = 'request-blood';
+    actionLabel = 'Post Request';
+  } else if (msg.includes('compatib') || msg.includes('group') || msg.includes('o+')) {
+    actionSection = 'home';
+    actionLabel = 'View Compatibility Chart';
+  } else if (msg.includes('otp') || msg.includes('password') || msg.includes('login') || msg.includes('forgot')) {
+    actionModal = 'login';
+    actionLabel = 'Open Login / Reset';
+  }
+
+  // Check for Google Gemini AI API Key
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+
+  if (apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE' && apiKey.trim().length > 5) {
+    try {
+      const ai = new GoogleGenAI({ apiKey });
+      const systemInstruction = `You are SEVAGAN AI Assistant, the official healthcare AI assistant for SEVAGAN Blood Network (a blood donation and emergency request platform in India).
+Your goal is to politely, empathetically, and concisely answer user questions about blood donation rules, donor eligibility (age 18-65, weight 45kg+, 3 months interval), blood group compatibility (O- universal donor, AB+ universal recipient), emergency requests, and account verification.
+Current platform language mode: ${language || 'en'}.
+If the user speaks Tamil or Hindi or English, reply fluently in that language. Keep responses concise (2-4 sentences max), lifesaving, and helpful.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: message,
+        config: {
+          systemInstruction
+        }
+      });
+
+      const reply = response.text || 'I am SEVAGAN AI Assistant! How can I help you save lives today?';
+      return res.json({
+        reply,
+        isAi: true,
+        actionSection,
+        actionLabel,
+        actionModal
+      });
+    } catch (err) {
+      console.warn('Gemini AI API generation fallback:', err.message);
+    }
+  }
+
+  // Fallback smart responses if Gemini key is missing/offline
+  let reply = '';
+  if (msg.includes('find') || msg.includes('search') || msg.includes('donor')) {
     reply = language === 'ta' 
       ? 'உங்களுக்கு அருகில் உள்ள குருதி கொடையாளர்களை இரத்த வகை மற்றும் மாவட்டம் மூலம் தேடலாம்.' 
       : 'You can search for voluntary donors by blood group and city on our Find Donors section.';
-    actionSection = 'find-donors';
-    actionLabel = 'Find Donors';
   } else if (msg.includes('register') || msg.includes('become') || msg.includes('sign up')) {
     reply = language === 'ta'
       ? 'கொடையாளராக பதிவு செய்ய 2 நிமிடங்கள் மட்டுமே ஆகும். 18-65 வயதுக்குட்பட்ட அனைவரும் பதிவு செய்யலாம்.'
       : 'Registering as a donor takes under 2 minutes! Anyone aged 18-65 in good health can register.';
-    actionSection = 'become-donor';
-    actionLabel = 'Become a Donor';
   } else if (msg.includes('emergency') || msg.includes('request') || msg.includes('urgent')) {
     reply = 'Post an emergency blood request immediately. Nearby registered donors are alerted right away!';
-    actionSection = 'request-blood';
-    actionLabel = 'Post Request';
   } else if (msg.includes('compatib') || msg.includes('group') || msg.includes('o+')) {
     reply = 'O Negative (O-) is the Universal Donor. O Positive (O+) can donate to O+, A+, B+, AB+.';
-    actionSection = 'home';
-    actionLabel = 'View Compatibility Chart';
   } else if (msg.includes('otp') || msg.includes('password') || msg.includes('login') || msg.includes('forgot')) {
     reply = 'You can verify your number via SMS/Email OTP, or reset your password using the "Forgot Password?" button.';
-    actionModal = 'login';
-    actionLabel = 'Open Login / Reset';
   } else {
-    reply = 'I am the SEVAGAN AI Assistant! How can I help you with blood donation, emergency requests, or account verification today?';
+    reply = 'I am the SEVAGAN AI Assistant! Add GEMINI_API_KEY in .env to activate Google Gemini AI responses. How can I help you today?';
   }
 
   return res.json({
     reply,
+    isAi: false,
     actionSection,
     actionLabel,
     actionModal
