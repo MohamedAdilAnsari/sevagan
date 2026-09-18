@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import nodemailer from 'nodemailer';
 import { User, Donor, BloodRequest, NotificationLog } from './models/dbModels.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -274,6 +275,103 @@ async function sendSmsOtp(mobileNumber, otpCode) {
     return { success: false, isDemo: true, message: 'FAST2SMS_API_KEY missing in .env' };
   }
 }
+
+// Real SMTP Email Dispatcher
+async function sendEmail({ to, subject, html, text }) {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '587', 10);
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const from = process.env.SMTP_FROM_EMAIL || user || 'noreply@sevagan.org';
+
+  console.log(`📧 [SMTP SERVICE] Preparing email to ${to} (${subject})...`);
+
+  if (user && pass && user !== 'YOUR_EMAIL@gmail.com' && user.trim().length > 3) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465,
+        auth: { user, pass }
+      });
+
+      const info = await transporter.sendMail({
+        from: `"SEVAGAN Blood Network" <${from}>`,
+        to,
+        subject,
+        text: text || '',
+        html: html || text || ''
+      });
+
+      console.log(`✅ [SMTP DELIVERED] Email sent to ${to}: ${info.messageId}`);
+      return { success: true, messageId: info.messageId };
+    } catch (err) {
+      console.error(`❌ [SMTP ERROR] Failed to send email via ${host}:`, err.message);
+      return { success: false, error: err.message };
+    }
+  } else {
+    console.log(`ℹ️ [DEV SMTP LOG] SMTP credentials not set in .env. Target=${to}, Subject=${subject}`);
+    return { success: false, isDemo: true, message: 'SMTP credentials missing in .env' };
+  }
+}
+
+// Send Custom Email Endpoint
+app.post('/api/send-email', async (req, res) => {
+  const { to, subject, html, text } = req.body || {};
+  if (!to || !subject) {
+    return res.status(400).json({ message: 'Recipient email (to) and subject are required' });
+  }
+
+  const result = await sendEmail({ to, subject, html, text });
+  return res.json({
+    success: true,
+    message: result.success ? `Email sent successfully to ${to}` : `SMTP credentials missing in .env. Logged email to ${to}`,
+    emailSent: result.success
+  });
+});
+
+// Send Email OTP Endpoint
+app.post('/api/send-email-otp', async (req, res) => {
+  const { email, purpose } = req.body || {};
+  if (!email) {
+    return res.status(400).json({ message: 'Email address is required' });
+  }
+
+  const targetEmail = email.toLowerCase().trim();
+  const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+  activeOtps.set(targetEmail, { otp: generatedOtp, createdAt: Date.now() });
+
+  const htmlTemplate = `
+    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 25px; background: #0f172a; color: #ffffff; border-radius: 12px; border: 1px solid #1e293b;">
+      <h2 style="color: #e63946; text-align: center; margin-bottom: 20px;">🩸 SEVAGAN Blood Network</h2>
+      <h3 style="text-align: center; color: #f8fafc;">Verification Code</h3>
+      <p style="text-align: center; color: #94a3b8; font-size: 15px;">Use the 4-digit code below to complete your ${purpose || 'verification'}:</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #ffffff; background: #1e293b; padding: 12px 24px; border-radius: 8px; border: 1px solid #e63946;">
+          ${generatedOtp}
+        </span>
+      </div>
+      <p style="text-align: center; color: #64748b; font-size: 13px;">This OTP is valid for 10 minutes. Please do not share this code with anyone.</p>
+    </div>
+  `;
+
+  const emailResult = await sendEmail({
+    to: targetEmail,
+    subject: `🔐 Your SEVAGAN Verification OTP: ${generatedOtp}`,
+    html: htmlTemplate,
+    text: `Your SEVAGAN verification code is: ${generatedOtp}`
+  });
+
+  return res.json({
+    success: true,
+    message: emailResult.success 
+      ? `Real SMTP Email OTP sent to ${targetEmail}` 
+      : `SMTP credentials missing in .env. Test OTP: ${generatedOtp}`,
+    targetEmail,
+    emailSent: emailResult.success,
+    otp: emailResult.success ? undefined : generatedOtp
+  });
+});
 
 // 1. Send OTP Endpoint
 app.post('/api/send-otp', async (req, res) => {
