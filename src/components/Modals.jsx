@@ -22,12 +22,20 @@ export const Modals = () => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(60);
   const [statusMsg, setStatusMsg] = useState('');
+  const [testCode, setTestCode] = useState('');
 
   useEffect(() => {
     if (modal === 'otp') {
       setOtp(['', '', '', '']);
       setTimer(60);
-      setStatusMsg(`📲 Real SMS OTP sent to +91 ${modalData?.mobile || 'phone'}. Check your mobile SMS.`);
+      if (modalData?.smsSent) {
+        setStatusMsg(`📲 Real SMS OTP sent to +91 ${modalData?.mobile || 'phone'}. Check your mobile SMS.`);
+        setTestCode('');
+      } else {
+        const code = modalData?.otp || '1234';
+        setTestCode(code);
+        setStatusMsg(`ℹ️ Fast2SMS Key not added in Vercel settings yet. Use test OTP code: ${code}`);
+      }
     }
   }, [modal, modalData]);
 
@@ -81,13 +89,14 @@ export const Modals = () => {
       return;
     }
 
+    let otpData = {};
     try {
       const res = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: signupMobile, purpose: 'user_registration' })
       });
-      await res.json();
+      otpData = await res.json();
     } catch (err) {
       console.warn('Send OTP API call failed:', err);
     }
@@ -95,6 +104,8 @@ export const Modals = () => {
     openModal('otp', {
       mobile: signupMobile,
       purpose: 'user_registration',
+      smsSent: otpData.smsSent,
+      otp: otpData.otp || '1234',
       onVerifySuccess: async () => {
         try {
           const regRes = await fetch('/api/register', {
@@ -147,12 +158,14 @@ export const Modals = () => {
       openModal('otp', {
         mobile: targetMobile,
         purpose: 'reset_password',
+        smsSent: data.smsSent,
+        otp: data.otp || '1234',
         onVerifySuccess: () => {
           openModal('reset_password', { mobile: targetMobile });
         }
       });
     } catch (err) {
-      alert('Failed to send password reset OTP. Please check your internet connection.');
+      alert('Failed to send password reset OTP. Please check your network connection.');
     }
   };
 
@@ -203,13 +216,25 @@ export const Modals = () => {
         body: JSON.stringify({ mobile: targetMobile, purpose: modalData?.purpose || 'resend' })
       });
       const data = await res.json();
-      setStatusMsg(data.message || `Fresh SMS OTP sent to +91 ${targetMobile}`);
+      if (data.smsSent) {
+        setStatusMsg(`📲 Fresh SMS OTP sent to +91 ${targetMobile}`);
+        setTestCode('');
+      } else {
+        const code = data.otp || '1234';
+        setTestCode(code);
+        setStatusMsg(`ℹ️ Fast2SMS Key missing on Vercel. Test OTP code: ${code}`);
+      }
     } catch (err) {
       console.warn('Resend OTP error:', err);
       setStatusMsg(`OTP requested for +91 ${targetMobile}`);
     }
     setTimer(60);
     setOtp(['', '', '', '']);
+  };
+
+  const handleAutoFillOtp = () => {
+    const digits = (testCode || '1234').slice(0, 4).split('');
+    setOtp(digits);
   };
 
   const handleOtpChange = (index, value) => {
@@ -480,20 +505,36 @@ export const Modals = () => {
               Enter 4-digit verification code sent to <strong>+91 {modalData?.mobile || 'your phone'}</strong>
             </p>
 
-            {/* Real SMS Status Notice */}
+            {/* Real SMS Status Notice / Fail-Safe Test Badge */}
             <div 
               style={{
                 margin: '1.2rem 0 1rem 0',
                 padding: '0.75rem 1rem',
                 borderRadius: '12px',
-                background: 'rgba(16, 185, 129, 0.12)',
-                borderLeft: '4px solid #10B981',
+                background: testCode ? 'rgba(239, 68, 68, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+                borderLeft: testCode ? '4px solid #EF4444' : '4px solid #10B981',
                 fontSize: '0.88rem',
                 color: 'var(--text-main)',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '0.5rem'
               }}
             >
-              {statusMsg || `📲 SMS verification code sent to +91 ${modalData?.mobile}. Please check your phone messages.`}
+              <div>
+                {statusMsg || `📲 SMS verification code sent to +91 ${modalData?.mobile}. Check your mobile SMS.`}
+              </div>
+              {testCode && (
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  style={{ padding: '0.3rem 0.6rem', fontSize: '0.78rem', minHeight: 'unset', whiteSpace: 'nowrap' }}
+                  onClick={handleAutoFillOtp}
+                >
+                  ⚡ Auto-fill
+                </button>
+              )}
             </div>
 
             <form onSubmit={handleOtpSubmit}>
@@ -521,7 +562,7 @@ export const Modals = () => {
                     onClick={handleResendOtp}
                     style={{ background: 'none', border: 'none', color: 'var(--primary-red)', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
                   >
-                    🔄 Resend Real SMS OTP
+                    🔄 Resend OTP Code
                   </button>
                 )}
               </div>
