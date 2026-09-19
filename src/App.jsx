@@ -9,6 +9,8 @@ import { BecomeDonorSection } from './components/BecomeDonorSection';
 import { RequestBloodSection } from './components/RequestBloodSection';
 import { AboutSection } from './components/AboutSection';
 import { ProfileSection } from './components/ProfileSection';
+import { BloodBanksSection } from './components/BloodBanksSection';
+import { DonationCampsSection } from './components/DonationCampsSection';
 import { Modals } from './components/Modals';
 import { LoginNotificationBanner } from './components/LoginNotificationBanner';
 import { ChatBot } from './components/ChatBot';
@@ -23,6 +25,8 @@ const MainContent = () => {
       {activeSection === 'find-donors' && <FindDonorsSection />}
       {activeSection === 'become-donor' && <BecomeDonorSection />}
       {activeSection === 'request-blood' && <RequestBloodSection />}
+      {activeSection === 'blood-banks' && <BloodBanksSection />}
+      {activeSection === 'camps' && <DonationCampsSection />}
       {activeSection === 'about' && <AboutSection />}
       {activeSection === 'profile' && <ProfileSection />}
       {activeSection === 'requests' && <RequestBloodSection />}

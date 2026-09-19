@@ -160,7 +160,7 @@ export const ChatBot = () => {
       {/* Chat Window Container */}
       {isOpen && (
         <div 
-          className="glass-card"
+          className="glass-card chatbot-window"
           style={{
             position: 'fixed',
             bottom: '95px',
@@ -176,7 +176,6 @@ export const ChatBot = () => {
             overflow: 'hidden',
             boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
             border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(15, 23, 42, 0.95)',
             backdropFilter: 'blur(16px)'
           }}
         >
@@ -243,15 +242,13 @@ export const ChatBot = () => {
                 }}
               >
                 <div
+                  className={`chat-bubble ${msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}
                   style={{
                     maxWidth: '85%',
                     padding: '0.75rem 1rem',
                     borderRadius: msg.sender === 'user' ? '16px 16px 2px 16px' : '16px 16px 16px 2px',
-                    background: msg.sender === 'user' ? '#E63946' : 'rgba(30, 41, 59, 0.9)',
-                    color: '#ffffff',
                     fontSize: '0.9rem',
-                    lineHeight: '1.4',
-                    border: msg.sender === 'bot' ? '1px solid rgba(255,255,255,0.1)' : 'none'
+                    lineHeight: '1.4'
                   }}
                 >
                   {msg.text}

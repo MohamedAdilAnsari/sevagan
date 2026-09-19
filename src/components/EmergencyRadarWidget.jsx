@@ -42,7 +42,7 @@ export const EmergencyRadarWidget = () => {
         {/* Widget Header & Nav Chips */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
               <span style={{ fontSize: '2rem' }}>📡</span> Live Emergency Match Radar
             </h3>
             <p style={{ color: 'var(--text-sec)', margin: '4px 0 0 0', fontSize: '0.95rem' }}>
@@ -135,17 +135,17 @@ export const EmergencyRadarWidget = () => {
             {/* Right: Live Matched Requests */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#ffffff' }}>Active Emergency Alerts</h4>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-main)' }}>Active Emergency Alerts</h4>
                 <span style={{ fontSize: '0.8rem', color: '#10B981', fontWeight: 'bold' }}>● Scanning Live</span>
               </div>
 
               {radarMatches.map((item) => (
                 <div 
                   key={item.id}
+                  className="radar-alert-card"
                   style={{
                     padding: '1rem 1.2rem',
                     borderRadius: '16px',
-                    background: 'rgba(255,255,255,0.05)',
                     borderLeft: item.urgency === 'CRITICAL' ? '4px solid #E63946' : '4px solid #F59E0B',
                     display: 'flex',
                     alignItems: 'center',
@@ -156,7 +156,7 @@ export const EmergencyRadarWidget = () => {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span className="blood-chip" style={{ fontSize: '0.85rem' }}>{item.blood}</span>
-                      <strong style={{ color: '#ffffff', fontSize: '0.95rem' }}>{item.patient}</strong>
+                      <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>{item.patient}</strong>
                       <span style={{ fontSize: '0.75rem', background: item.urgency === 'CRITICAL' ? 'rgba(230,57,70,0.2)' : 'rgba(245,158,11,0.2)', color: item.urgency === 'CRITICAL' ? '#E63946' : '#F59E0B', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>
                         {item.urgency}
                       </span>

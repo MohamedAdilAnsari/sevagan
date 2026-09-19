@@ -30,6 +30,8 @@ export const Footer = () => {
             <li><a onClick={() => navigateToSection('find-donors')} data-i18n="nav_find_donors">{t('nav_find_donors')}</a></li>
             <li><a onClick={() => navigateToSection('become-donor')} data-i18n="nav_become_donor">{t('nav_become_donor')}</a></li>
             <li><a onClick={() => navigateToSection('request-blood')} data-i18n="nav_request_blood">{t('nav_request_blood')}</a></li>
+            <li><a onClick={() => navigateToSection('blood-banks')}>🏥 Blood Banks & Reserves</a></li>
+            <li><a onClick={() => navigateToSection('camps')}>📅 Donation Drives & Camps</a></li>
             <li><a onClick={() => navigateToSection('about')} data-i18n="nav_about">{t('nav_about')}</a></li>
           </ul>
         </div>

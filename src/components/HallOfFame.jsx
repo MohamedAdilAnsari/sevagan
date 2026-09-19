@@ -226,7 +226,7 @@ export const HallOfFame = () => {
               padding: '0.65rem 1.8rem',
               fontSize: '0.92rem',
               borderRadius: '30px',
-              color: '#ffffff',
+              color: 'var(--text-main)',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
@@ -246,7 +246,7 @@ export const HallOfFame = () => {
           <div className="modal-content glass-card text-center" onClick={e => e.stopPropagation()} style={{ maxWidth: '450px' }}>
             <button className="modal-close-btn" onClick={() => setSelectedHero(null)}>&times;</button>
             <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🏅</div>
-            <h3 style={{ fontSize: '1.6rem', color: '#ffffff', marginBottom: '0.3rem' }}>{selectedHero.name}</h3>
+            <h3 style={{ fontSize: '1.6rem', color: 'var(--text-main)', marginBottom: '0.3rem' }}>{selectedHero.name}</h3>
             <p style={{ color: 'var(--text-sec)', marginBottom: '1.5rem' }}>
               Registered Lifesaver from <strong>{selectedHero.district}</strong>
             </p>

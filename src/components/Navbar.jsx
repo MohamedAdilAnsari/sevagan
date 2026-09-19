@@ -49,6 +49,12 @@ export const Navbar = () => {
           <a className={`nav-link ${activeSection === 'request-blood' ? 'active' : ''}`} onClick={() => handleNavClick('request-blood')}>
             {t('nav_request_blood')}
           </a>
+          <a className={`nav-link ${activeSection === 'blood-banks' ? 'active' : ''}`} onClick={() => handleNavClick('blood-banks')}>
+            🏥 Blood Banks
+          </a>
+          <a className={`nav-link ${activeSection === 'camps' ? 'active' : ''}`} onClick={() => handleNavClick('camps')}>
+            📅 Camps & Drives
+          </a>
           <a className={`nav-link ${activeSection === 'about' ? 'active' : ''}`} onClick={() => handleNavClick('about')}>
             {t('nav_about')}
           </a>

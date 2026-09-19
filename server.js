@@ -430,22 +430,36 @@ Your goal is to politely, empathetically, and concisely answer user questions ab
 Current platform language mode: ${language || 'en'}.
 If the user speaks Tamil or Hindi or English, reply fluently in that language. Keep responses concise (2-4 sentences max), lifesaving, and helpful.`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: message,
-        config: {
-          systemInstruction
-        }
-      });
+      let responseText = null;
+      const candidateModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
 
-      const reply = response.text || 'I am SEVAGAN AI Assistant! How can I help you save lives today?';
-      return res.json({
-        reply,
-        isAi: true,
-        actionSection,
-        actionLabel,
-        actionModal
-      });
+      for (const modelName of candidateModels) {
+        try {
+          const res = await ai.models.generateContent({
+            model: modelName,
+            contents: message,
+            config: {
+              systemInstruction
+            }
+          });
+          if (res && res.text) {
+            responseText = res.text;
+            break;
+          }
+        } catch (modelErr) {
+          console.warn(`Gemini model ${modelName} error:`, modelErr.message);
+        }
+      }
+
+      if (responseText) {
+        return res.json({
+          reply: responseText,
+          isAi: true,
+          actionSection,
+          actionLabel,
+          actionModal
+        });
+      }
     } catch (err) {
       console.warn('Gemini AI API generation fallback:', err.message);
     }
