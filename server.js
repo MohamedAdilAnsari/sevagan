@@ -431,7 +431,7 @@ Current platform language mode: ${language || 'en'}.
 If the user speaks Tamil or Hindi or English, reply fluently in that language. Keep responses concise (2-4 sentences max), lifesaving, and helpful.`;
 
       let responseText = null;
-      const candidateModels = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+      const candidateModels = ['gemini-3.6-flash', 'gemini-3.1-pro-preview'];
 
       for (const modelName of candidateModels) {
         try {
@@ -465,6 +465,8 @@ If the user speaks Tamil or Hindi or English, reply fluently in that language. K
     }
   }
 
+  const isKeyConfigured = apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE' && apiKey.trim().length > 5;
+
   // Fallback smart responses if Gemini key is missing/offline
   let reply = '';
   if (msg.includes('find') || msg.includes('search') || msg.includes('donor')) {
@@ -482,7 +484,9 @@ If the user speaks Tamil or Hindi or English, reply fluently in that language. K
   } else if (msg.includes('otp') || msg.includes('password') || msg.includes('login') || msg.includes('forgot')) {
     reply = 'You can verify your number via SMS/Email OTP, or reset your password using the "Forgot Password?" button.';
   } else {
-    reply = 'I am the SEVAGAN AI Assistant! Add GEMINI_API_KEY in .env to activate Google Gemini AI responses. How can I help you today?';
+    reply = isKeyConfigured 
+      ? 'I am the SEVAGAN AI Assistant! How can I help you with blood donation, emergency requests, or finding voluntary donors today?' 
+      : 'I am the SEVAGAN AI Assistant! Add GEMINI_API_KEY in .env to activate Google Gemini AI responses. How can I help you today?';
   }
 
   return res.json({
