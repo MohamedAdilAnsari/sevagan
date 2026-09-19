@@ -59,19 +59,16 @@ export const HeroBloodDropFill = () => {
 
       const liquidY = dropBottomY - (dropHeight * progress);
 
-      // 2. Rising Red Blood Liquid Fill (Rising smoothly from bottom Y=365 up to top Y=95 without any dark shadow overlay)
-      if (progress > 0.01) {
+      // 2. Unfilled Translucent Mask over Top Portion of Teardrop (Fills from very bottom Y=365 up to Y=95)
+      if (progress < 0.99) {
         ctx.save();
         drawTeardropPath(ctx);
         ctx.clip();
 
-        // Fill rising liquid area from liquidY down to dropBottomY
+        // Fill region ABOVE liquidY (light white mask in light theme, dark mask in dark theme)
         ctx.beginPath();
-        ctx.rect(0, liquidY, width, height - liquidY);
-        const liquidGradient = ctx.createLinearGradient(0, liquidY, 0, dropBottomY);
-        liquidGradient.addColorStop(0, 'rgba(255, 59, 78, 0.82)');
-        liquidGradient.addColorStop(1, 'rgba(197, 34, 31, 0.92)');
-        ctx.fillStyle = liquidGradient;
+        ctx.rect(0, 0, width, liquidY);
+        ctx.fillStyle = isLightMode ? 'rgba(255, 255, 255, 0.88)' : 'rgba(10, 12, 18, 0.85)';
         ctx.fill();
 
         // Glowing Surface Wave Line at rising liquid edge
